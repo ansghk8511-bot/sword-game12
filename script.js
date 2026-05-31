@@ -9,30 +9,19 @@ const IMAGES = {
     11: "sams.png", 12: "highpass.png", 13: "forbidden.png"
 };
 
-function goToShop() {
-    document.getElementById('game-screen').style.display = 'none';
-    document.getElementById('shop-screen').style.display = 'block';
-    document.getElementById('shop-money').innerText = money.toLocaleString();
-}
-
-function goToGame() {
-    document.getElementById('shop-screen').style.display = 'none';
-    document.getElementById('game-screen').style.display = 'block';
-    updateUI();
+// 성공 확률: 3강부터 3.5%씩 감소
+function getSuccessRate() {
+    if (swordLevel < 3) return 100;
+    return Math.max(100 - ((swordLevel - 2) * 3.5), 1.0); // 1.0% 아래로 떨어지지 않게 설정
 }
 
 function updateUI() {
     document.getElementById('money').innerText = money.toLocaleString();
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
-    
-    // 비용 계산: 500 + (레벨 * 500)
-    let cost = 500 + (swordLevel * 500);
-    document.getElementById('upgrade-cost').innerText = cost.toLocaleString();
+    document.getElementById('upgrade-cost').innerText = (500 + (swordLevel * 500)).toLocaleString();
     document.getElementById('sell-price').innerText = (swordLevel * 1000).toLocaleString();
-    
-    let rate = Math.max(100 - (swordLevel * 5), 0.5);
-    document.getElementById('success-rate').innerText = rate.toFixed(1);
+    document.getElementById('success-rate').innerText = getSuccessRate().toFixed(1);
     
     document.getElementById('sword-img').src = IMAGES[swordLevel] || "bokgeom.png";
 
@@ -56,11 +45,9 @@ function logMessage(msg) {
 function upgradeSword() {
     let cost = 500 + (swordLevel * 500);
     if (money < cost) { alert("돈이 부족합니다!"); return; }
-    
     money -= cost;
-    let rate = Math.max(100 - (swordLevel * 5), 0.5);
     
-    if (Math.random() * 100 <= rate) {
+    if (Math.random() * 100 <= getSuccessRate()) {
         swordLevel++;
         logMessage(`✨ 성공: +${swordLevel}`);
     } else {
@@ -78,22 +65,11 @@ function upgradeSword() {
     updateUI();
 }
 
-function buyShield() {
-    if (money >= 5000) { money -= 5000; shieldCount++; logMessage("🛡️ 방지권 구매 완료"); updateUI(); }
-    else { alert("돈 부족!"); }
-}
-
-function sellSword() {
-    if (swordLevel === 0) return;
-    money += (swordLevel * 1000);
-    logMessage(`💰 판매: +${(swordLevel * 1000).toLocaleString()}원`);
-    swordLevel = 0;
-    updateUI();
-}
-
-function combineFragments() {
-    if (fragments.length >= 10) { fragments.splice(0, 10); swordLevel++; updateUI(); }
-    else { alert("파편이 10개 필요합니다!"); }
-}
+// 나머지 기능
+function goToShop() { document.getElementById('game-screen').style.display = 'none'; document.getElementById('shop-screen').style.display = 'block'; document.getElementById('shop-money').innerText = money.toLocaleString(); }
+function goToGame() { document.getElementById('shop-screen').style.display = 'none'; document.getElementById('game-screen').style.display = 'block'; updateUI(); }
+function buyShield() { if (money >= 5000) { money -= 5000; shieldCount++; logMessage("🛡️ 구매 완료"); updateUI(); } else { alert("돈 부족!"); } }
+function sellSword() { if (swordLevel === 0) return; money += (swordLevel * 1000); logMessage(`💰 판매: +${(swordLevel * 1000).toLocaleString()}원`); swordLevel = 0; updateUI(); }
+function combineFragments() { if (fragments.length >= 10) { fragments.splice(0, 10); swordLevel++; updateUI(); } else { alert("파편이 10개 필요합니다!"); } }
 
 updateUI();
