@@ -9,17 +9,27 @@ const IMAGES = {
     11: "sams.png", 12: "highpass.png", 13: "forbidden.png"
 };
 
-// 성공 확률: 3강부터 3.5%씩 감소
+// 강화 비용 로직: 20강 이전은 1000원씩, 20강부터는 3000원씩
+function getUpgradeCost() {
+    if (swordLevel < 20) {
+        return 1000 + (swordLevel * 1000);
+    } else {
+        // 20강 기준(20000원)에서 3000원씩 추가
+        return 20000 + ((swordLevel - 20) * 3000);
+    }
+}
+
 function getSuccessRate() {
     if (swordLevel < 3) return 100;
-    return Math.max(100 - ((swordLevel - 2) * 3.5), 1.0); // 1.0% 아래로 떨어지지 않게 설정
+    return Math.max(100 - ((swordLevel - 2) * 3.5), 1.0);
 }
 
 function updateUI() {
     document.getElementById('money').innerText = money.toLocaleString();
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
-    document.getElementById('upgrade-cost').innerText = (500 + (swordLevel * 500)).toLocaleString();
+    
+    document.getElementById('upgrade-cost').innerText = getUpgradeCost().toLocaleString();
     document.getElementById('sell-price').innerText = (swordLevel * 1000).toLocaleString();
     document.getElementById('success-rate').innerText = getSuccessRate().toFixed(1);
     
@@ -37,13 +47,8 @@ function updateUI() {
     });
 }
 
-function logMessage(msg) {
-    let logEl = document.getElementById('game-log');
-    logEl.innerHTML = msg + "<br>" + logEl.innerHTML;
-}
-
 function upgradeSword() {
-    let cost = 500 + (swordLevel * 500);
+    let cost = getUpgradeCost();
     if (money < cost) { alert("돈이 부족합니다!"); return; }
     money -= cost;
     
@@ -66,6 +71,7 @@ function upgradeSword() {
 }
 
 // 나머지 기능
+function logMessage(msg) { let logEl = document.getElementById('game-log'); logEl.innerHTML = msg + "<br>" + logEl.innerHTML; }
 function goToShop() { document.getElementById('game-screen').style.display = 'none'; document.getElementById('shop-screen').style.display = 'block'; document.getElementById('shop-money').innerText = money.toLocaleString(); }
 function goToGame() { document.getElementById('shop-screen').style.display = 'none'; document.getElementById('game-screen').style.display = 'block'; updateUI(); }
 function buyShield() { if (money >= 5000) { money -= 5000; shieldCount++; logMessage("🛡️ 구매 완료"); updateUI(); } else { alert("돈 부족!"); } }
