@@ -64,56 +64,40 @@ function logMessage(msg) {
 // 💀 파산 처리
 function gameOver() {
     logMessage("💀 GAME OVER: 파산했습니다!");
-    alert("💀 파산! 돈이 부족하여 강화를 계속할 수 없습니다.");
+    alert("💀 파산! 게임을 더 이상 진행할 수 없습니다.");
     document.getElementById('btn-upgrade').disabled = true;
     document.getElementById('btn-sell').disabled = true;
     document.getElementById('btn-shield').disabled = true;
 }
 
-// 🏆 [추가] 클리어 처리
+// 🏆 클리어 처리
 function gameClear() {
-    logMessage("🎉 GAME CLEAR: 교무실 뒷편 전설 달성!");
+    logMessage("🎉 GAME CLEAR: 전설 달성!");
     alert("🎉 축하합니다! 30강에 도달하여 게임을 클리어했습니다!");
     document.getElementById('btn-upgrade').disabled = true;
 }
 
 function upgradeSword() {
     let cost = 500 + (swordLevel * 300);
-    if (money < cost) { gameOver(); return; }
+    
+    // [규칙] 1강(0->1) 도전 시 돈이 없으면 즉시 파산
+    if (swordLevel === 0 && money < cost) {
+        logMessage("❌ 자금 부족으로 1강 도전 불가 - 탈락!");
+        gameOver();
+        return;
+    }
+    
+    // [규칙] 나머지 레벨에서 돈 부족 시 강화 불가
+    if (money < cost) {
+        logMessage("❌ 돈이 부족합니다!");
+        return;
+    }
     
     money -= cost;
     let rate = getSuccessRate(swordLevel);
+    
     if (Math.random() * 100 <= rate) {
         swordLevel++;
         logMessage(`✨ 성공: +${swordLevel} (확률: ${rate.toFixed(1)}%)`);
         
-        // 🏆 30강 체크
-        if (swordLevel >= 30) {
-            gameClear();
-        }
-    } else {
-        if (swordLevel >= 5 && shieldCount > 0) { 
-            shieldCount--; 
-            logMessage("🛡️ 방지권 사용"); 
-        } else { 
-            swordLevel = 0; 
-            logMessage("💥 파괴!"); 
-        }
-    }
-    updateUI();
-}
-
-function sellSword() {
-    if (swordLevel === 0) { logMessage("⚠️ 0강은 판매 불가!"); return; }
-    money += calculateSellPrice(swordLevel);
-    logMessage(`💰 판매: ${calculateSellPrice(swordLevel).toLocaleString()}원 획득`);
-    swordLevel = 0;
-    updateUI();
-}
-
-function buyShield() {
-    if (money >= SHIELD_PRICE) { money -= SHIELD_PRICE; shieldCount++; updateUI(); }
-    else { logMessage("❌ 돈 부족!"); }
-}
-
-updateUI();
+        if (swordLevel >= 30)
