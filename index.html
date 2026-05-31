@@ -6,6 +6,7 @@
     <style>
         body { font-family: sans-serif; text-align: center; background: #1a1a2e; color: white; padding-top: 20px; }
         .screen { background: white; color: black; padding: 20px; border-radius: 15px; width: 350px; margin: auto; border: 3px solid #333; }
+        #sword-img { width: 150px; height: 150px; background: #eee; border: 2px solid #333; margin: 10px; object-fit: contain; }
         button { padding: 10px 20px; cursor: pointer; margin: 5px; border-radius: 5px; border: none; color: white; font-weight: bold; }
         .btn-upgrade { background: #e74c3c; }
         .btn-sell { background: #27ae60; }
@@ -17,6 +18,7 @@
 
 <div id="game-screen" class="screen">
     <h1>🗡️ 중앙중 검 강화게임</h1>
+    <img id="sword-img" src="bokgeom.png" alt="검 이미지">
     <div>💰 잔고: <span id="money">50,000</span>원 | 🛡️ 방지권: <span id="shield-count">0</span>개</div>
     <h2>검 레벨: <span id="level-display">+0</span></h2>
     <p>강화 비용: <span id="upgrade-cost">1,000</span>원</p>
