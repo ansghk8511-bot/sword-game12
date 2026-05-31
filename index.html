@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중앙중 검 강화하기</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div class="top-nav">
+            <span class="nav-link">◀ 아이템창가기</span>
+            <h1 class="main-title">중앙중 <span class="badge">검</span> 강화하기</h1>
+            <span class="nav-link">상점가기 🛒</span>
+        </div>
+        
+        <div class="main-layout">
+            <div class="side-panel left-panel">
+                <div class="info-box">
+                    <p>🔥 강화비용: <span id="upgrade-cost">0</span>원</p>
+                    <p>💰 판매가격: <span id="sell-price">0</span>원</p>
+                </div>
+                <div class="log-box">
+                    <div id="game-log">대장간에 오신 것을 환영합니다!</div>
+                </div>
+            </div>
+
+            <div class="center-panel">
+                <div class="sword-wrapper">
+                    <img id="sword-img" src="bokgeom.png" alt="검 이미지">
+                </div>
+                <div class="sword-info">
+                    <span id="level-display">+0</span> 
+                    <span id="sword-display">낡은 단검</span>
+                </div>
+                <div class="rate-display">
+                    성공률 <span id="success-rate">100</span>%
+                </div>
+                <div class="action-buttons">
+                    <button id="btn-upgrade" onclick="upgradeSword()">⚡ 강화하기</button>
+                    <button id="btn-sell" onclick="sellSword()">💰 검 판매</button>
+                </div>
+            </div>
+
+            <div class="side-panel right-panel">
+                <div class="status-box">
+                    <p>🛡️ 방지권: <span id="shield-count">0</span>개</p>
+                    <p>🪙 내 돈: <span id="money">0</span>원</p>
+                </div>
+                <div class="shop-box">
+                    <p class="shop-title">📦 강화소 상점</p>
+                    <button id="btn-buy-shield" onclick="buyShield()">방지권 구매 (3,000원)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

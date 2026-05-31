@@ -1,0 +1,186 @@
+/* 기본 세팅 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', 'Malgun Gothic', sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 10px;
+}
+
+/* 🖥️ 가로형 게임 모니터 비율 프레임 고정 */
+#game-container {
+    width: 800px;         
+    height: 560px;        
+    background: #ffffff;
+    border: 5px solid #333;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+}
+
+/* 상단 바 */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+.nav-link {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+}
+
+.main-title {
+    font-size: 30px;
+    font-weight: 900;
+    color: #000;
+}
+
+.main-title .badge {
+    font-size: 12px;
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
+    padding: 1px 3px;
+    font-style: italic;
+    vertical-align: super;
+}
+
+/* 3단 가로 분할 */
+.main-layout {
+    display: flex;
+    gap: 15px;
+    flex: 1;              
+    min-height: 0;        
+}
+
+/* 좌우 패널 */
+.side-panel {
+    width: 200px;         
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-box, .status-box, .shop-box {
+    background: #f8f9fa;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+/* 로그 박스 */
+.log-box {
+    flex: 1;
+    background: #2c3e50;
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+    font-size: 12px;
+    overflow-y: auto;
+    border: 2px solid #333;
+}
+
+/* 가운데 검 디스플레이 */
+.center-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; 
+    background: #fafafa;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+/* 이미지 박스 크기 제한 */
+.sword-wrapper {
+    width: 220px;         
+    height: 160px;        
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sword-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;  
+}
+
+.sword-info {
+    font-size: 32px;
+    font-weight: 900;
+    color: #000;
+    text-align: center;
+}
+
+.rate-display {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* 버튼 */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.action-buttons button {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid #333;
+    border-radius: 6px;
+}
+
+#btn-upgrade {
+    background: #ffeaa7;
+    color: #000;
+}
+#btn-upgrade:hover { background: #fdcb6e; }
+
+#btn-sell {
+    background: #fab1a0;
+    color: #000;
+}
+#btn-sell:hover { background: #ff7675; }
+
+.shop-title {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+#btn-buy-shield {
+    width: 100%;
+    padding: 6px;
+    font-weight: bold;
+    background: #e17055;
+    color: white;
+    border: 2px solid #333;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#btn-buy-shield:hover { background: #d63031; }
