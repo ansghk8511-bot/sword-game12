@@ -3,7 +3,6 @@ let shieldCount = 0;
 let swordLevel = 0;
 let fragments = [];
 
-// 이미지 목록 (파일명이 정확한지 확인하세요!)
 const IMAGES = {
     0: "bokgeom.png", 4: "bat.png", 5: "yugi.png", 
     6: "bansageom.png", 7: "lose.png", 8: "8th.png", 
@@ -24,20 +23,19 @@ function goToGame() {
 }
 
 function updateUI() {
-    // 메인화면 업데이트
     document.getElementById('money').innerText = money.toLocaleString();
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
     
-    // 이미지 업데이트
+    // 판매 예상 가격 계산 (레벨 * 1000)
+    document.getElementById('sell-price').innerText = (swordLevel * 1000).toLocaleString();
+    
     let imgDisplay = document.getElementById('sword-img');
     imgDisplay.src = IMAGES[swordLevel] || "bokgeom.png";
 
-    // 방지권 소모량 안내
     let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
     document.getElementById('shield-req').innerText = req > 0 ? `⚠️ 실패 시 방지권 ${req}개 소모!` : "방어 불가";
     
-    // 파편 UI
     let fragList = document.getElementById('fragment-list');
     fragList.innerHTML = "";
     fragments.forEach(() => {
@@ -92,7 +90,7 @@ function sellSword() {
     if (swordLevel === 0) return;
     let price = swordLevel * 1000;
     money += price;
-    logMessage(`💰 판매: +${price.toLocaleString()}원`);
+    logMessage(`💰 판매 완료: +${price.toLocaleString()}원`);
     swordLevel = 0;
     updateUI();
 }
