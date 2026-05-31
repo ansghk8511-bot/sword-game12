@@ -19,16 +19,13 @@ function updateUI() {
     document.getElementById('money').innerText = money.toLocaleString();
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
+    document.getElementById('sell-price').innerText = (swordLevel * 1000).toLocaleString();
     
-    // 판매가: 레벨이 높을수록 제곱으로 비싸지게 설정 (예: 10강=10만, 20강=40만)
-    let price = swordLevel * swordLevel * 1000;
-    document.getElementById('sell-price').innerText = price.toLocaleString();
-    
-    // 이미지 자동 매칭
+    // 이미지 파일명 자동 매칭 (level0.png, level1.png ...)
     document.getElementById('sword-img').src = "level" + swordLevel + ".png";
 
     let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
-    document.getElementById('shield-req').innerText = req > 0 ? `⚠️ 실패 시 방지권 ${req}개 소모!` : "방어 불가";
+    document.getElementById('shield-req').innerText = req > 0 ? `⚠️ 실패 시 방지권 ${req}개 소모!` : "";
     
     let fragList = document.getElementById('fragment-list');
     fragList.innerHTML = "";
@@ -60,7 +57,6 @@ function upgradeSword() {
             shieldCount -= req;
             logMessage(`🛡️ 방지권 ${req}개 소모하여 방어!`);
         } else {
-            // 파편 지급 로직 명확화
             let earned = Math.floor(swordLevel / 2) + 1;
             for(let i = 0; i < earned; i++) fragments.push({});
             swordLevel = 0;
@@ -76,14 +72,14 @@ function buyShield() {
         shieldCount++; 
         logMessage("🛡️ 방지권 구매 완료 (-5,000원)"); 
         document.getElementById('shop-money').innerText = money.toLocaleString();
-    } else { alert("잔액 부족!"); }
+    } else { alert("잔액이 부족합니다!"); }
 }
 
 function sellSword() {
     if (swordLevel === 0) return;
-    let price = swordLevel * swordLevel * 1000;
+    let price = swordLevel * 1000;
     money += price;
-    logMessage(`💰 판매 완료: +${price.toLocaleString()}원`);
+    logMessage(`💰 판매: +${price.toLocaleString()}원`);
     swordLevel = 0;
     updateUI();
 }
@@ -92,7 +88,7 @@ function combineFragments() {
     if (fragments.length >= 10) { 
         fragments.splice(0, 10); 
         swordLevel++; 
-        logMessage("🛠️ 파편 10개 결합! 단계 상승");
+        logMessage("🛠️ 파편 10개 결합 성공!");
         updateUI(); 
     } else { alert("파편이 10개 필요합니다!"); }
 }
