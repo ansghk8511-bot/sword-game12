@@ -6,7 +6,6 @@
     <style>
         body { font-family: 'Pretendard', sans-serif; background: #1a1a2e; display: flex; justify-content: center; padding-top: 50px; }
         .screen { background: #ffffff; padding: 40px; border-radius: 20px; width: 450px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 3px solid #333; }
-        /* 이미지 스타일 - 테두리를 넣어 이미지 위치를 명확히 함 */
         #sword-img { width: 200px; height: 200px; border: 5px solid #333; border-radius: 15px; margin: 15px; background: #eee; object-fit: contain; }
         button { padding: 12px 25px; font-size: 1rem; cursor: pointer; border: none; border-radius: 8px; margin: 5px; color: white; font-weight: bold; transition: 0.1s; }
         button:active { transform: translateY(2px); }
@@ -18,28 +17,24 @@
     </style>
 </head>
 <body>
-
     <div id="game-screen" class="screen">
         <h1>🗡️ 중앙중 검 강화게임</h1>
-        <img id="sword-img" src="level0.png" alt="검 이미지" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+        <img id="sword-img" src="bokgeom.png" alt="검 이미지">
         <div style="font-size: 1.2rem; font-weight: bold; margin: 10px;">
             💰 잔고: <span id="money">50,000</span>원 | 🛡️ 방지권: <span id="shield-count">0</span>개
         </div>
         <h2>검 레벨: <span id="level-display">+0</span></h2>
         <p id="shield-req" style="color:red; font-weight:bold;"></p>
-        
         <button class="btn-upgrade" onclick="upgradeSword()">⚡ 검 강화하기</button>
         <button class="btn-sell" onclick="sellSword()">💰 검 판매하기</button>
         <div style="margin-top: 5px; font-weight: bold;">예상 판매가: <span id="sell-price">0</span>원</div>
         <br>
         <button class="btn-shop" onclick="goToShop()">🛒 상점 이동</button>
-
         <h3>💎 파편 보관함</h3>
         <div id="fragment-list"></div>
         <button onclick="combineFragments()" style="background:#f39c12;">🛠️ 파편 10개로 복구</button>
         <div id="game-log"></div>
     </div>
-
     <div id="shop-screen" class="screen" style="display: none;">
         <h1>🛒 중앙중 상점</h1>
         <div style="font-size: 1.2rem; margin: 10px;">현재 잔고: <span id="shop-money" style="font-weight:bold; color:#27ae60;">50,000</span>원</div>
@@ -47,7 +42,6 @@
         <br><br>
         <button onclick="goToGame()" style="background:#7f8c8d;">🔙 대장간으로 돌아가기</button>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
