@@ -6,12 +6,8 @@
     <style>
         body { font-family: 'Pretendard', sans-serif; background: #1a1a2e; display: flex; justify-content: center; padding-top: 50px; }
         .screen { background: #ffffff; padding: 40px; border-radius: 20px; width: 600px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 3px solid #333; }
-        h1 { color: #2c3e50; font-size: 2.5rem; margin-bottom: 20px; }
         #sword-img { width: 250px; height: 250px; border: 8px solid #34495e; border-radius: 20px; margin: 20px; background: #eee; object-fit: contain; }
-        button { 
-            padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 12px; 
-            margin: 8px; color: white; transition: all 0.1s; box-shadow: 0 6px #555; font-weight: bold;
-        }
+        button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 12px; margin: 8px; color: white; transition: all 0.1s; box-shadow: 0 6px #555; font-weight: bold; }
         button:active { transform: translateY(4px); box-shadow: none; }
         .btn-upgrade { background-color: #e74c3c; }
         .btn-sell { background-color: #27ae60; }
@@ -21,22 +17,19 @@
     </style>
 </head>
 <body>
-
     <div id="game-screen" class="screen">
         <h1>🗡️ 중앙중 검 강화게임</h1>
-        <img id="sword-img" src="bokgeom.png" alt="강화 검">
+        <img id="sword-img" src="level0.png" alt="강화 검">
         <div style="font-size: 1.6rem; font-weight: bold; margin: 15px; color: #2c3e50;">
             💰 잔고: <span id="money">50,000</span>원 | 🛡️ 방지권: <span id="shield-count">0</span>개
         </div>
         <h2 style="font-size: 2rem;">검 레벨: <span id="level-display">+0</span></h2>
         <p id="shield-req" style="color:#c0392b; font-size: 1.2rem; font-weight: bold;"></p>
-        
         <button class="btn-upgrade" onclick="upgradeSword()">⚡ 검 강화하기</button>
         <button class="btn-sell" onclick="sellSword()">💰 검 판매하기</button>
         <div style="margin-top: 5px; font-weight: bold;">예상 판매가: <span id="sell-price">0</span>원</div>
         <br>
         <button class="btn-shop" onclick="goToShop()">🛒 상점 이동</button>
-
         <div style="margin-top: 30px;">
             <h3>💎 파편 보관함</h3>
             <div id="fragment-list"></div>
@@ -44,18 +37,13 @@
         </div>
         <div id="game-log"></div>
     </div>
-
     <div id="shop-screen" class="screen" style="display: none;">
         <h1>🛒 중앙중 상점</h1>
-        <div style="font-size: 1.2rem; margin: 10px; color: #2c3e50;">
-            현재 보유 잔고: <span id="shop-money" style="font-weight:bold; color:#27ae60;">50,000</span>원
-        </div>
-        <p>방지권 1개 구매 시 5,000원 차감</p>
+        <div style="font-size: 1.2rem; margin: 10px; color: #2c3e50;">현재 잔고: <span id="shop-money" style="font-weight:bold; color:#27ae60;">50,000</span>원</div>
         <button class="btn-shop" onclick="buyShield()">🛡️ 방지권 구매 (5,000원)</button>
         <br><br>
         <button onclick="goToGame()" style="background:#7f8c8d; box-shadow: 0 6px #555;">🔙 대장간으로 돌아가기</button>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
