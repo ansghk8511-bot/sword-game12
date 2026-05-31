@@ -3,6 +3,7 @@ let shieldCount = 0;
 let swordLevel = 0;
 let fragments = [];
 
+// 이미지 목록 (파일명이 정확한지 확인하세요!)
 const IMAGES = {
     0: "bokgeom.png", 4: "bat.png", 5: "yugi.png", 
     6: "bansageom.png", 7: "lose.png", 8: "8th.png", 
@@ -13,6 +14,7 @@ const IMAGES = {
 function goToShop() {
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('shop-screen').style.display = 'block';
+    document.getElementById('shop-money').innerText = money.toLocaleString();
 }
 
 function goToGame() {
@@ -22,20 +24,20 @@ function goToGame() {
 }
 
 function updateUI() {
+    // 메인화면 업데이트
     document.getElementById('money').innerText = money.toLocaleString();
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
     
+    // 이미지 업데이트
     let imgDisplay = document.getElementById('sword-img');
-    let img = "bokgeom.png";
-    for (let i = swordLevel; i >= 0; i--) {
-        if (IMAGES[i]) { img = IMAGES[i]; break; }
-    }
-    imgDisplay.src = img;
+    imgDisplay.src = IMAGES[swordLevel] || "bokgeom.png";
 
+    // 방지권 소모량 안내
     let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
-    document.getElementById('shield-req').innerText = req > 0 ? `실패 시 방지권 ${req}개 소모` : "방어 불가";
+    document.getElementById('shield-req').innerText = req > 0 ? `⚠️ 실패 시 방지권 ${req}개 소모!` : "방어 불가";
     
+    // 파편 UI
     let fragList = document.getElementById('fragment-list');
     fragList.innerHTML = "";
     fragments.forEach(() => {
@@ -53,6 +55,7 @@ function logMessage(msg) {
 function upgradeSword() {
     let cost = 500 + (swordLevel * 500);
     if (money < cost) { alert("돈이 부족합니다!"); return; }
+    
     money -= cost;
     let rate = Math.max(100 - (swordLevel * 5), 0.5);
     
@@ -63,7 +66,7 @@ function upgradeSword() {
         let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
         if (req > 0 && shieldCount >= req) {
             shieldCount -= req;
-            logMessage(`🛡️ 방지권 ${req}개 소모!`);
+            logMessage(`🛡️ 방지권 ${req}개 소모하여 방어!`);
         } else {
             let earned = Math.floor(swordLevel / 2) + 1;
             for(let i = 0; i < earned; i++) fragments.push({});
@@ -75,20 +78,34 @@ function upgradeSword() {
 }
 
 function buyShield() {
-    if (money >= 5000) { money -= 5000; shieldCount++; logMessage("🛡️ 방지권 구매 완료"); updateUI(); }
-    else { alert("돈 부족!"); }
+    if (money >= 5000) { 
+        money -= 5000; 
+        shieldCount++; 
+        logMessage("🛡️ 방지권 구매 완료 (-5,000원)"); 
+        document.getElementById('shop-money').innerText = money.toLocaleString();
+    } else { 
+        alert("잔액이 부족합니다!"); 
+    }
 }
 
 function sellSword() {
     if (swordLevel === 0) return;
-    money += (swordLevel * 1000);
+    let price = swordLevel * 1000;
+    money += price;
+    logMessage(`💰 판매: +${price.toLocaleString()}원`);
     swordLevel = 0;
     updateUI();
 }
 
 function combineFragments() {
-    if (fragments.length >= 10) { fragments.splice(0, 10); swordLevel++; updateUI(); }
-    else { alert("파편이 10개 필요합니다!"); }
+    if (fragments.length >= 10) { 
+        fragments.splice(0, 10); 
+        swordLevel++; 
+        logMessage("🛠️ 파편 10개 결합 성공!");
+        updateUI(); 
+    } else { 
+        alert("파편이 10개 필요합니다!"); 
+    }
 }
 
 updateUI();
