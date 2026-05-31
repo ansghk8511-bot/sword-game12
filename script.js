@@ -3,7 +3,6 @@ let shieldCount = 0;
 let swordLevel = 0;
 let fragments = [];
 
-// 검 이미지 데이터
 const IMAGES = {
     0: "bokgeom.png", 4: "bat.png", 5: "yugi.png", 
     6: "bansageom.png", 7: "lose.png", 8: "8th.png", 
@@ -28,13 +27,13 @@ function updateUI() {
     document.getElementById('level-display').innerText = "+" + swordLevel;
     document.getElementById('upgrade-cost').innerText = (500 + (swordLevel * 500)).toLocaleString();
     
-    // 이미지 업데이트
+    // 이미지 처리
     let imgDisplay = document.getElementById('sword-img');
-    let img = "bokgeom.png"; // 기본값
+    let img = "bokgeom.png";
     for (let i = swordLevel; i >= 0; i--) {
         if (IMAGES[i]) { img = IMAGES[i]; break; }
     }
-    if (imgDisplay) imgDisplay.src = img;
+    imgDisplay.src = img;
 
     let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
     document.getElementById('shield-req').innerText = req > 0 ? `실패 시 방지권 ${req}개 소모` : "방어 불가";
@@ -50,13 +49,13 @@ function updateUI() {
 
 function logMessage(msg) {
     let logEl = document.getElementById('game-log');
-    if(logEl) logEl.innerHTML = msg + "<br>" + logEl.innerHTML;
+    logEl.innerHTML = msg + "<br>" + logEl.innerHTML;
 }
 
 function upgradeSword() {
     let cost = 500 + (swordLevel * 500);
-    if (swordLevel === 0 && money < cost) { alert("💀 파산!"); location.reload(); return; }
-    if (money < cost) { alert("⚠️ 돈 부족!"); return; }
+    if (swordLevel === 0 && money < cost) { alert("💀 파산! 게임을 다시 시작합니다."); location.reload(); return; }
+    if (money < cost) { alert("⚠️ 돈이 부족합니다!"); return; }
     
     money -= cost;
     let rate = Math.max(100 - (swordLevel * 5), 0.5);
@@ -68,7 +67,7 @@ function upgradeSword() {
         let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
         if (req > 0 && shieldCount >= req) {
             shieldCount -= req;
-            logMessage(`🛡️ 방지권 ${req}개 소모!`);
+            logMessage(`🛡️ 방지권 ${req}개 소모하여 방어!`);
         } else {
             let earned = Math.floor(swordLevel / 2) + 1;
             for(let i = 0; i < earned; i++) fragments.push({});
@@ -86,7 +85,9 @@ function buyShield() {
 
 function sellSword() {
     if (swordLevel === 0) return;
-    money += (swordLevel * 1000);
+    let price = swordLevel * 1000;
+    money += price;
+    logMessage(`💰 판매: ${price.toLocaleString()}원`);
     swordLevel = 0;
     updateUI();
 }
