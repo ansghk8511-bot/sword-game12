@@ -4,39 +4,54 @@
     <meta charset="UTF-8">
     <title>중앙중 검 강화게임</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #2c3e50; color: white; padding-top: 50px; }
-        .screen { background: white; color: black; padding: 20px; border-radius: 15px; width: 350px; margin: auto; }
-        #sword-img { width: 150px; height: 150px; background: #eee; border: 2px solid #333; margin: 10px; }
-        button { padding: 10px 20px; cursor: pointer; margin: 5px; }
+        body { font-family: sans-serif; text-align: center; background: #1a1a2e; color: white; padding-top: 20px; }
+        .screen { background: white; color: black; padding: 20px; border-radius: 15px; width: 350px; margin: auto; border: 3px solid #333; }
+        #sword-img { width: 150px; height: 150px; background: #eee; border: 2px solid #333; margin: 10px; object-fit: contain; }
+        button { padding: 10px 20px; cursor: pointer; margin: 5px; border-radius: 5px; border: none; color: white; font-weight: bold; }
+        .btn-upgrade { background: #e74c3c; }
+        .btn-sell { background: #27ae60; }
+        .btn-shop { background: #2980b9; }
+        #game-log { margin-top: 20px; height: 100px; overflow-y: auto; font-size: 0.8em; color: gray; border: 1px solid #ccc; padding: 5px; text-align: left; }
     </style>
 </head>
 <body>
 
-<div class="screen">
+<div id="game-screen" class="screen">
     <h1>🗡️ 중앙중 검 강화게임</h1>
-    <img id="sword-img" src="bokgeom.png" alt="검 이미지">
-    <p>💰 잔고: <span id="money">50,000</span>원</p>
+    <img id="sword-img" src="bokgeom.png" alt="검">
+    <div>💰 잔고: <span id="money">50,000</span>원 | 🛡️ 방지권: <span id="shield-count">0</span>개</div>
     <h2>검 레벨: <span id="level-display">+0</span></h2>
-    
     <p>강화 비용: <span id="upgrade-cost">1,000</span>원</p>
     <p>성공 확률: <span id="success-rate">100.0</span>%</p>
     
-    <button onclick="upgradeSword()">⚡ 검 강화하기</button>
-    <button onclick="sellSword()">💰 검 판매하기</button>
-    <div id="game-log" style="margin-top:20px; font-size: 0.8em; color: gray;"></div>
+    <button class="btn-upgrade" onclick="upgradeSword()">⚡ 검 강화하기</button>
+    <button class="btn-sell" onclick="sellSword()">💰 검 판매하기</button>
+    <br>
+    <button class="btn-shop" onclick="goToShop()">🛒 상점 이동</button>
+    <div id="game-log"></div>
+</div>
+
+<div id="shop-screen" class="screen" style="display: none;">
+    <h1>🛒 중앙중 상점</h1>
+    <p>현재 잔고: <span id="shop-money" style="font-weight:bold;">50,000</span>원</p>
+    <button class="btn-shop" onclick="buyShield()">🛡️ 방지권 구매 (5,000원)</button>
+    <br><br>
+    <button style="background:#7f8c8d;" onclick="goToGame()">🔙 대장간으로 돌아가기</button>
 </div>
 
 <script>
+    // --- 자바스크립트 영역 시작 ---
     let money = 50000;
+    let shieldCount = 0;
     let swordLevel = 0;
 
-    // 1. 강화 확률 로직: 3강부터 3.5%씩 감소
+    // 1. 성공 확률: 3강부터 3.5%씩 감소
     function getSuccessRate() {
         if (swordLevel < 3) return 100;
         return Math.max(100 - ((swordLevel - 2) * 3.5), 1.0);
     }
 
-    // 2. 강화 비용 로직: 1~20강은 1000원씩, 20강 이후는 3000원씩 상승
+    // 2. 강화 비용: 20강까지 1000원씩, 20강 이후 3000원씩 상승
     function getUpgradeCost() {
         if (swordLevel < 20) {
             return (swordLevel + 1) * 1000;
@@ -47,6 +62,8 @@
 
     function updateUI() {
         document.getElementById('money').innerText = money.toLocaleString();
+        document.getElementById('shop-money').innerText = money.toLocaleString();
+        document.getElementById('shield-count').innerText = shieldCount;
         document.getElementById('level-display').innerText = "+" + swordLevel;
         document.getElementById('upgrade-cost').innerText = getUpgradeCost().toLocaleString();
         document.getElementById('success-rate').innerText = getSuccessRate().toFixed(1);
@@ -54,31 +71,58 @@
 
     function upgradeSword() {
         let cost = getUpgradeCost();
-        if (money < cost) {
-            alert("돈이 부족합니다!");
-            return;
-        }
+        if (money < cost) { alert("돈이 부족합니다!"); return; }
         
         money -= cost;
-        
         if (Math.random() * 100 <= getSuccessRate()) {
             swordLevel++;
-            document.getElementById('game-log').innerHTML = "성공! +"+swordLevel + "<br>" + document.getElementById('game-log').innerHTML;
+            log("성공! +"+swordLevel);
         } else {
-            swordLevel = 0;
-            document.getElementById('game-log').innerHTML = "실패! 검 파괴됨<br>" + document.getElementById('game-log').innerHTML;
+            if (shieldCount > 0) {
+                shieldCount--;
+                log("🛡️ 방지권으로 파괴 방지!");
+            } else {
+                swordLevel = 0;
+                log("💥 실패! 검 파괴됨");
+            }
         }
         updateUI();
+    }
+
+    function buyShield() {
+        if (money >= 5000) {
+            money -= 5000;
+            shieldCount++;
+            log("🛡️ 방지권 구매 완료");
+            updateUI();
+        } else {
+            alert("돈 부족!");
+        }
     }
 
     function sellSword() {
         money += (swordLevel * 1000);
+        log("💰 판매 완료: +" + (swordLevel * 1000) + "원");
         swordLevel = 0;
         updateUI();
-        alert("판매 완료!");
+    }
+
+    function log(msg) {
+        document.getElementById('game-log').innerHTML = msg + "<br>" + document.getElementById('game-log').innerHTML;
+    }
+
+    function goToShop() {
+        document.getElementById('game-screen').style.display = 'none';
+        document.getElementById('shop-screen').style.display = 'block';
+    }
+
+    function goToGame() {
+        document.getElementById('shop-screen').style.display = 'none';
+        document.getElementById('game-screen').style.display = 'block';
     }
 
     updateUI();
+    // --- 자바스크립트 영역 끝 ---
 </script>
 
 </body>
