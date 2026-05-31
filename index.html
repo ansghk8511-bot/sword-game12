@@ -11,6 +11,7 @@
         .btn-upgrade { background: #e74c3c; }
         .btn-sell { background: #27ae60; }
         .btn-shop { background: #2980b9; }
+        #fragment-list { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; min-height: 30px; border: 2px dashed #999; padding: 5px; justify-content: center; }
         #game-log { margin-top: 20px; height: 100px; overflow-y: auto; font-size: 0.8em; color: gray; border: 1px solid #ccc; padding: 5px; text-align: left; }
     </style>
 </head>
@@ -18,7 +19,7 @@
 
 <div id="game-screen" class="screen">
     <h1>🗡️ 중앙중 검 강화게임</h1>
-    <img id="sword-img" src="bokgeom.png" alt="검 이미지">
+    <img id="sword-img" src="bokgeom.png" alt="검">
     <div>💰 잔고: <span id="money">50,000</span>원 | 🛡️ 방지권: <span id="shield-count">0</span>개</div>
     <h2>검 레벨: <span id="level-display">+0</span></h2>
     <p>강화 비용: <span id="upgrade-cost">1,000</span>원</p>
@@ -26,8 +27,12 @@
     
     <button class="btn-upgrade" onclick="upgradeSword()">⚡ 검 강화하기</button>
     <button class="btn-sell" onclick="sellSword()">💰 검 판매하기</button>
-    <br>
+    <p>예상 판매가: <span id="sell-price">0</span>원</p>
+    
     <button class="btn-shop" onclick="goToShop()">🛒 상점 이동</button>
+    <h3>💎 파편 보관함</h3>
+    <div id="fragment-list"></div>
+    <button onclick="combineFragments()" style="background:#f39c12; color:black;">🛠️ 파편 10개로 복구</button>
     <div id="game-log"></div>
 </div>
 
