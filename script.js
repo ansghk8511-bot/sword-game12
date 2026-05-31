@@ -25,9 +25,12 @@ function updateUI() {
     document.getElementById('money').innerText = money.toLocaleString();
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
+    
+    // 비용 계산: 500 + (레벨 * 500)
+    let cost = 500 + (swordLevel * 500);
+    document.getElementById('upgrade-cost').innerText = cost.toLocaleString();
     document.getElementById('sell-price').innerText = (swordLevel * 1000).toLocaleString();
     
-    // 강화 성공 확률 계산 (레벨당 5%씩 감소)
     let rate = Math.max(100 - (swordLevel * 5), 0.5);
     document.getElementById('success-rate').innerText = rate.toFixed(1);
     
@@ -53,9 +56,8 @@ function logMessage(msg) {
 function upgradeSword() {
     let cost = 500 + (swordLevel * 500);
     if (money < cost) { alert("돈이 부족합니다!"); return; }
-    money -= cost;
     
-    // 강화 확률 적용
+    money -= cost;
     let rate = Math.max(100 - (swordLevel * 5), 0.5);
     
     if (Math.random() * 100 <= rate) {
