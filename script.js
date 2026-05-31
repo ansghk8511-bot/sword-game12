@@ -1,22 +1,19 @@
 let money = 50000;
 let shieldCount = 0;
 let swordLevel = 0;
+let fragments = [];
 
-// 모든 레벨을 다 채우기 번거롭다면, 
-// 없는 레벨은 기본 이미지(bokgeom.png)가 나오도록 로직을 짰습니다.
 const IMAGES = {
     0: "bokgeom.png", 4: "bat.png", 5: "yugi.png", 6: "bansageom.png", 
     7: "lose.png", 8: "8th.png", 9: "smell.png", 10: "daguri.png", 
     11: "sams.png", 12: "highpass.png", 13: "forbidden.png"
 };
 
-// 1. 성공 확률: 3강부터 3.5%씩 감소
 function getSuccessRate() {
     if (swordLevel < 3) return 100;
     return Math.max(100 - ((swordLevel - 2) * 3.5), 1.0);
 }
 
-// 2. 강화 비용: 1~20강은 1000원씩, 20강 이후는 3000원씩 상승
 function getUpgradeCost() {
     if (swordLevel < 20) {
         return (swordLevel + 1) * 1000;
@@ -31,19 +28,20 @@ function updateUI() {
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
     document.getElementById('upgrade-cost').innerText = getUpgradeCost().toLocaleString();
+    document.getElementById('sell-price').innerText = (swordLevel * 1000).toLocaleString();
     document.getElementById('success-rate').innerText = getSuccessRate().toFixed(1);
     
-    // 핵심 수정: 레벨에 맞는 이미지가 없으면 기본값(bokgeom.png)을 유지
-    const imgElement = document.getElementById('sword-img');
-    const nextImage = IMAGES[swordLevel];
-    
-    if (nextImage) {
-        imgElement.src = nextImage;
-    } else {
-        // 만약 레벨 이미지가 정의 안 되어 있다면 기존 이미지를 유지하거나 0강 이미지를 씀
-        if (swordLevel === 0) imgElement.src = "bokgeom.png";
-        // 그 외 레벨은 이전 이미지를 그대로 둠 (이미지가 사라지는 현상 방지)
-    }
+    // 이미지 처리: 정의된 이미지가 있으면 쓰고, 없으면 기본 bokgeom.png
+    document.getElementById('sword-img').src = IMAGES[swordLevel] || "bokgeom.png";
+
+    // 파편 표시
+    let fragList = document.getElementById('fragment-list');
+    fragList.innerHTML = "";
+    fragments.forEach(() => {
+        let span = document.createElement("span");
+        span.innerText = "💎";
+        fragList.appendChild(span);
+    });
 }
 
 function upgradeSword() {
@@ -53,14 +51,16 @@ function upgradeSword() {
     money -= cost;
     if (Math.random() * 100 <= getSuccessRate()) {
         swordLevel++;
-        log("성공! +"+swordLevel);
+        log("✨ 성공! +" + swordLevel);
     } else {
         if (shieldCount > 0) {
             shieldCount--;
-            log("🛡️ 방지권으로 파괴 방지!");
+            log("🛡️ 방지권 소모!");
         } else {
+            let earned = Math.floor(swordLevel / 2) + 1;
+            for(let i=0; i<earned; i++) fragments.push({});
             swordLevel = 0;
-            log("💥 실패! 검 파괴됨");
+            log("💥 파괴! 파편 " + earned + "개 획득");
         }
     }
     updateUI();
@@ -82,6 +82,17 @@ function sellSword() {
     log("💰 판매 완료: +" + (swordLevel * 1000) + "원");
     swordLevel = 0;
     updateUI();
+}
+
+function combineFragments() {
+    if (fragments.length >= 10) {
+        fragments.splice(0, 10);
+        swordLevel++;
+        log("🛠️ 파편으로 검 복구!");
+        updateUI();
+    } else {
+        alert("파편이 10개 필요합니다!");
+    }
 }
 
 function log(msg) {
