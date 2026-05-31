@@ -2,6 +2,8 @@ let money = 50000;
 let shieldCount = 0;
 let swordLevel = 0;
 
+// 모든 레벨을 다 채우기 번거롭다면, 
+// 없는 레벨은 기본 이미지(bokgeom.png)가 나오도록 로직을 짰습니다.
 const IMAGES = {
     0: "bokgeom.png", 4: "bat.png", 5: "yugi.png", 6: "bansageom.png", 
     7: "lose.png", 8: "8th.png", 9: "smell.png", 10: "daguri.png", 
@@ -31,8 +33,17 @@ function updateUI() {
     document.getElementById('upgrade-cost').innerText = getUpgradeCost().toLocaleString();
     document.getElementById('success-rate').innerText = getSuccessRate().toFixed(1);
     
-    // 이미지 자동 업데이트
-    document.getElementById('sword-img').src = IMAGES[swordLevel] || "bokgeom.png";
+    // 핵심 수정: 레벨에 맞는 이미지가 없으면 기본값(bokgeom.png)을 유지
+    const imgElement = document.getElementById('sword-img');
+    const nextImage = IMAGES[swordLevel];
+    
+    if (nextImage) {
+        imgElement.src = nextImage;
+    } else {
+        // 만약 레벨 이미지가 정의 안 되어 있다면 기존 이미지를 유지하거나 0강 이미지를 씀
+        if (swordLevel === 0) imgElement.src = "bokgeom.png";
+        // 그 외 레벨은 이전 이미지를 그대로 둠 (이미지가 사라지는 현상 방지)
+    }
 }
 
 function upgradeSword() {
