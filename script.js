@@ -1,93 +1,52 @@
-// 💰 기본 데이터
-let money = 50000; 
+// 상태 변수
+let money = 50000;
 let shieldCount = 0;
 let swordLevel = 0;
-const SHIELD_PRICE = 3000;
 
-// 📸 이미지 설정
-const IMAGES = {
-    swords: {
-        0: "bokgeom.png", 4: "bat.png", 5: "yugi.png", 
-        6: "bansageom.png", 7: "lose.png", 8: "8th.png", 
-        9: "smell.png", 10: "daguri.png", 11: "sams.png", 
-        12: "highpass.png", 13: "forbidden.png"
-    }
-};
-
-const swordNames = [
-    "연습용 목검", "다듬어진 목검", "녹슨 철검", "강철 롱소드", "대가리 뚝배기 파괴검",
-    "수행평가 유기검", "엄마 잔소리 반사검", "롤 연패 유발검", "롤토체스 8등 확정검",
-    "앞자리 정수리 냄새검", "다구리 검", "개노답 삼형제검", "급식실 1등 하이패스검",
-    "타반 출입 (긴장감 100%)", "1-1", "1-2", "1-3", "1-4", "1-5", 
-    "2-1", "2-2", "2-3", "2-4", "2-5", "3-1", "3-2", "3-3", "3-4", "3-5", 
-    "교장실 (긴급 호출)", "👑 교무실 뒷편 (최종 전설) 👑"
-];
-
-// 판매 가격 계산식
-function calculateSellPrice(level) {
-    if (level === 0) return 0;
-    let currentUpgradeCost = 500 + ((level - 1) * 300);
-    let sellPrice = (level <= 4) ? (currentUpgradeCost * 0.7) : (currentUpgradeCost * 1.5 + (Math.pow(level, 2) * 200));
-    if (level >= 7) sellPrice += Math.pow(level - 6, 2.5) * 2500;
-    return Math.floor(sellPrice);
-}
-
-// 확률 계산식: 1강마다 2.5%씩 감소
+// 1. 강화 확률 계산 함수 (3강부터 레벨당 3.5%씩 감소)
 function getSuccessRate(level) {
-    let rate = 100 - (level * 2.5);
-    return Math.max(rate, 1);
+    if (level < 3) return 100;
+    return Math.max(100 - ((level - 2) * 3.5), 1.0);
 }
 
+// 2. 강화 비용 계산 함수
+function getUpgradeCost() {
+    return 500 + (swordLevel * 300);
+}
+
+// 3. UI 업데이트 함수
 function updateUI() {
     document.getElementById('money').innerText = money.toLocaleString();
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
-    document.getElementById('sword-display').innerText = swordNames[Math.min(swordLevel, swordNames.length - 1)];
+    document.getElementById('upgrade-cost').innerText = getUpgradeCost().toLocaleString();
+    document.getElementById('sell-price').innerText = (swordLevel * 1000).toLocaleString();
     
-    let rate = getSuccessRate(swordLevel);
+    // 성공 확률 업데이트
+    const rate = getSuccessRate(swordLevel);
     document.getElementById('success-rate').innerText = rate.toFixed(1);
-    document.getElementById('upgrade-cost').innerText = (500 + (swordLevel * 300)).toLocaleString();
-    document.getElementById('sell-price').innerText = calculateSellPrice(swordLevel).toLocaleString();
-
-    let img = "bokgeom.png";
-    for (let i = swordLevel; i >= 0; i--) {
-        if (IMAGES.swords[i]) { img = IMAGES.swords[i]; break; }
-    }
-    document.getElementById('sword-img').src = img;
+    
+    // 검 이름 업데이트 (선택 사항)
+    document.getElementById('sword-display').innerText = swordLevel >= 30 ? "전설의 검" : "강화 중인 검";
 }
 
+// 4. 로그 메시지 출력
 function logMessage(msg) {
-    let logEl = document.getElementById('game-log');
+    const logEl = document.getElementById('game-log');
     logEl.innerHTML = msg + "<br>" + logEl.innerHTML;
 }
 
-// 💀 파산 처리
-function gameOver() {
-    logMessage("💀 GAME OVER: 파산했습니다!");
-    alert("💀 파산! 게임을 더 이상 진행할 수 없습니다.");
-    document.getElementById('btn-upgrade').disabled = true;
-    document.getElementById('btn-sell').disabled = true;
-    document.getElementById('btn-shield').disabled = true;
-}
-
-// 🏆 클리어 처리
-function gameClear() {
-    logMessage("🎉 GAME CLEAR: 전설 달성!");
-    alert("🎉 축하합니다! 30강에 도달하여 게임을 클리어했습니다!");
-    document.getElementById('btn-upgrade').disabled = true;
-}
-
+// 5. 강화 로직
 function upgradeSword() {
-    let cost = 500 + (swordLevel * 300);
+    let cost = getUpgradeCost();
     
-    // [규칙] 1강(0->1) 도전 시 돈이 없으면 즉시 파산
+    // 파산 규칙
     if (swordLevel === 0 && money < cost) {
         logMessage("❌ 자금 부족으로 1강 도전 불가 - 탈락!");
         gameOver();
         return;
     }
     
-    // [규칙] 나머지 레벨에서 돈 부족 시 강화 불가
     if (money < cost) {
         logMessage("❌ 돈이 부족합니다!");
         return;
@@ -99,5 +58,49 @@ function upgradeSword() {
     if (Math.random() * 100 <= rate) {
         swordLevel++;
         logMessage(`✨ 성공: +${swordLevel} (확률: ${rate.toFixed(1)}%)`);
-        
-        if (swordLevel >= 30)
+        if (swordLevel >= 30) gameClear();
+    } else {
+        logMessage("💥 강화 실패!");
+        // 여기서 실패 시 로직 추가 (예: 파괴 또는 방지권 소모)
+        swordLevel = 0; 
+    }
+    
+    updateUI();
+}
+
+// 6. 상점 및 판매 로직
+function buyShield() {
+    if (money >= 3000) {
+        money -= 3000;
+        shieldCount++;
+        logMessage("🛡️ 방지권 구매 완료!");
+        updateUI();
+    } else {
+        alert("돈이 부족합니다!");
+    }
+}
+
+function sellSword() {
+    if (swordLevel === 0) return;
+    let price = swordLevel * 1000;
+    money += price;
+    logMessage(`💰 판매: +${price.toLocaleString()}원`);
+    swordLevel = 0;
+    updateUI();
+}
+
+// 7. 게임 오버 및 클리어
+function gameOver() {
+    logMessage("💀 GAME OVER: 파산했습니다!");
+    alert("💀 파산! 게임을 더 이상 진행할 수 없습니다.");
+    document.getElementById('btn-upgrade').disabled = true;
+}
+
+function gameClear() {
+    logMessage("🏆 GAME CLEAR: 전설 달성!");
+    alert("🎉 축하합니다! 30강에 도달하여 게임을 클리어했습니다!");
+    document.getElementById('btn-upgrade').disabled = true;
+}
+
+// 초기화
+updateUI();
