@@ -3,7 +3,14 @@ let shieldCount = 0;
 let swordLevel = 0;
 let fragments = [];
 
-// 화면 전환
+// 검 이미지 데이터
+const IMAGES = {
+    0: "bokgeom.png", 4: "bat.png", 5: "yugi.png", 
+    6: "bansageom.png", 7: "lose.png", 8: "8th.png", 
+    9: "smell.png", 10: "daguri.png", 11: "sams.png", 
+    12: "highpass.png", 13: "forbidden.png"
+};
+
 function goToShop() {
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('shop-screen').style.display = 'block';
@@ -15,18 +22,23 @@ function goToGame() {
     updateUI();
 }
 
-// 화면 업데이트
 function updateUI() {
     document.getElementById('money').innerText = money.toLocaleString();
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
     document.getElementById('upgrade-cost').innerText = (500 + (swordLevel * 500)).toLocaleString();
     
-    // 단계별 방지권 필요량 표시
+    // 이미지 업데이트
+    let imgDisplay = document.getElementById('sword-img');
+    let img = "bokgeom.png"; // 기본값
+    for (let i = swordLevel; i >= 0; i--) {
+        if (IMAGES[i]) { img = IMAGES[i]; break; }
+    }
+    if (imgDisplay) imgDisplay.src = img;
+
     let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
     document.getElementById('shield-req').innerText = req > 0 ? `실패 시 방지권 ${req}개 소모` : "방어 불가";
     
-    // 파편 UI
     let fragList = document.getElementById('fragment-list');
     fragList.innerHTML = "";
     fragments.forEach(() => {
@@ -38,17 +50,16 @@ function updateUI() {
 
 function logMessage(msg) {
     let logEl = document.getElementById('game-log');
-    logEl.innerHTML = msg + "<br>" + logEl.innerHTML;
+    if(logEl) logEl.innerHTML = msg + "<br>" + logEl.innerHTML;
 }
 
-// 핵심 강화 로직
 function upgradeSword() {
     let cost = 500 + (swordLevel * 500);
-    if (swordLevel === 0 && money < cost) { alert("💀 파산! 게임을 다시 시작합니다."); location.reload(); return; }
-    if (money < cost) { alert("⚠️ 돈이 부족합니다! 판매 후 다시 시도하세요."); return; }
+    if (swordLevel === 0 && money < cost) { alert("💀 파산!"); location.reload(); return; }
+    if (money < cost) { alert("⚠️ 돈 부족!"); return; }
     
     money -= cost;
-    let rate = Math.max(100 - (swordLevel * 5), 0.5); // 하드모드 확률
+    let rate = Math.max(100 - (swordLevel * 5), 0.5);
     
     if (Math.random() * 100 <= rate) {
         swordLevel++;
@@ -57,7 +68,7 @@ function upgradeSword() {
         let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
         if (req > 0 && shieldCount >= req) {
             shieldCount -= req;
-            logMessage(`🛡️ 방지권 ${req}개 소모하여 방어!`);
+            logMessage(`🛡️ 방지권 ${req}개 소모!`);
         } else {
             let earned = Math.floor(swordLevel / 2) + 1;
             for(let i = 0; i < earned; i++) fragments.push({});
@@ -68,35 +79,21 @@ function upgradeSword() {
     updateUI();
 }
 
-// 상점 전용 기능
 function buyShield() {
-    if (money >= 5000) {
-        money -= 5000;
-        shieldCount++;
-        logMessage("🛡️ 방지권 구매 완료");
-        updateUI();
-    } else { alert("❌ 돈이 부족합니다!"); }
+    if (money >= 5000) { money -= 5000; shieldCount++; logMessage("🛡️ 방지권 구매"); updateUI(); }
+    else { alert("❌ 돈 부족!"); }
 }
 
-// 판매 기능
 function sellSword() {
     if (swordLevel === 0) return;
-    let sellPrice = swordLevel * 1000;
-    money += sellPrice;
-    logMessage(`💰 판매 완료: ${sellPrice.toLocaleString()}원 획득`);
+    money += (swordLevel * 1000);
     swordLevel = 0;
     updateUI();
 }
 
-// 파편 결합
 function combineFragments() {
-    if (fragments.length >= 10) {
-        fragments.splice(0, 10);
-        swordLevel++;
-        logMessage("🛠️ 파편 10개 결합 성공!");
-        updateUI();
-    } else { alert("❌ 파편이 부족합니다 (10개 필요)"); }
+    if (fragments.length >= 10) { fragments.splice(0, 10); swordLevel++; updateUI(); }
+    else { alert("❌ 파편 부족!"); }
 }
 
-// 초기 호출
 updateUI();
