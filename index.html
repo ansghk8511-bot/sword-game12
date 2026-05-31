@@ -28,15 +28,19 @@
         <p id="shield-req" style="color:red; font-weight:bold;"></p>
         
         <button class="btn-upgrade" onclick="upgradeSword()">⚡ 검 강화하기</button>
+        <div style="font-weight: bold; margin-bottom: 10px;">강화 비용: <span id="upgrade-cost">500</span>원</div>
+        
         <button class="btn-sell" onclick="sellSword()">💰 검 판매하기</button>
-        <div style="margin-top: 5px; font-weight: bold;">예상 판매가: <span id="sell-price">0</span>원</div>
+        <div style="font-weight: bold;">예상 판매가: <span id="sell-price">0</span>원</div>
         <br>
         <button class="btn-shop" onclick="goToShop()">🛒 상점 이동</button>
+
         <h3>💎 파편 보관함</h3>
         <div id="fragment-list"></div>
         <button onclick="combineFragments()" style="background:#f39c12;">🛠️ 파편 10개로 복구</button>
         <div id="game-log"></div>
     </div>
+    
     <div id="shop-screen" class="screen" style="display: none;">
         <h1>🛒 중앙중 상점</h1>
         <div style="font-size: 1.2rem; margin: 10px;">현재 잔고: <span id="shop-money" style="font-weight:bold; color:#27ae60;">50,000</span>원</div>
