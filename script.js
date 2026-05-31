@@ -21,8 +21,9 @@ function updateUI() {
     document.getElementById('level-display').innerText = "+" + swordLevel;
     document.getElementById('sell-price').innerText = (swordLevel * 1000).toLocaleString();
     
-    // 이미지 파일명 자동 매칭 (level0.png, level1.png ...)
-    document.getElementById('sword-img').src = "level" + swordLevel + ".png";
+    // 이미지 파일명 자동 매칭 (level0.png, level1.png 등)
+    let imgElement = document.getElementById('sword-img');
+    imgElement.src = "level" + swordLevel + ".png";
 
     let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
     document.getElementById('shield-req').innerText = req > 0 ? `⚠️ 실패 시 방지권 ${req}개 소모!` : "";
