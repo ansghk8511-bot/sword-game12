@@ -58,7 +58,7 @@ function upgradeSword() {
     
     if (Math.random() * 100 <= rate) {
         swordLevel++;
-        logMessage(`✨ 성공: +${swordLevel}`);
+        logMessage(`✨ 강화 성공: +${swordLevel}`);
     } else {
         let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
         if (req > 0 && shieldCount >= req) {
@@ -68,14 +68,14 @@ function upgradeSword() {
             let earned = Math.floor(swordLevel / 2) + 1;
             for(let i = 0; i < earned; i++) fragments.push({});
             swordLevel = 0;
-            logMessage(`💥 파괴! 파편 ${earned}개 획득`);
+            logMessage(`💥 검 파괴! 파편 ${earned}개 획득`);
         }
     }
     updateUI();
 }
 
 function buyShield() {
-    if (money >= 5000) { money -= 5000; shieldCount++; logMessage("🛡️ 방지권 구매"); updateUI(); }
+    if (money >= 5000) { money -= 5000; shieldCount++; logMessage("🛡️ 방지권 구매 완료"); updateUI(); }
     else { alert("돈 부족!"); }
 }
 
@@ -88,7 +88,7 @@ function sellSword() {
 
 function combineFragments() {
     if (fragments.length >= 10) { fragments.splice(0, 10); swordLevel++; updateUI(); }
-    else { alert("파편 부족!"); }
+    else { alert("파편이 10개 필요합니다!"); }
 }
 
 updateUI();
