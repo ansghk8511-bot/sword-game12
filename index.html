@@ -1,60 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9195625627131922"
-     crossorigin="anonymous"></script>
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>중앙중 검 강화하기</title>
-    <link rel="stylesheet" href="style.css">
+    <title>교수님 학점 강화 게임</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f4f4f4; padding: 20px; }
+        #game-screen, #shop-screen { background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .stats { font-size: 1.2rem; margin: 10px 0; }
+        #game-log { height: 150px; overflow-y: scroll; border: 1px solid #ccc; margin-top: 10px; font-size: 0.9rem; text-align: left; padding: 5px; }
+        #fragment-list { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; min-height: 30px; }
+    </style>
 </head>
 <body>
-    <div id="game-container">
-        <div class="top-nav">
-            <span class="nav-link">◀ 아이템창가기</span>
-            <h1 class="main-title">중앙중 <span class="badge">검</span> 강화하기</h1>
-            <span class="nav-link">상점가기 🛒</span>
+
+    <div id="game-screen">
+        <h1>강화의 대장간</h1>
+        <div class="stats">
+            💰 돈: <span id="money">50,000</span>원<br>
+            🛡️ 방지권: <span id="shield-count">0</span>개<br>
+            ⚔️ 검 레벨: <span id="level-display">+0</span>
         </div>
         
-        <div class="main-layout">
-            <div class="side-panel left-panel">
-                <div class="info-box">
-                    <p>🔥 강화비용: <span id="upgrade-cost">0</span>원</p>
-                    <p>💰 판매가격: <span id="sell-price">0</span>원</p>
-                </div>
-                <div class="log-box">
-                    <div id="game-log">대장간에 오신 것을 환영합니다!</div>
-                </div>
-            </div>
+        <p>강화 비용: <span id="upgrade-cost">500</span>원</p>
+        <p id="shield-req" style="color: red; font-size: 0.8rem;"></p>
+        
+        <button onclick="upgradeSword()">⚡ 강화하기</button>
+        <button onclick="sellSword()">💰 검 판매</button>
+        <br><br>
+        <button onclick="combineFragments()">🛠️ 파편 10개로 복구/강화</button>
+        <button onclick="goToShop()">🛒 상점 가기</button>
 
-            <div class="center-panel">
-                <div class="sword-wrapper">
-                    <img id="sword-img" src="bokgeom.png" alt="검 이미지">
-                </div>
-                <div class="sword-info">
-                    <span id="level-display">+0</span> 
-                    <span id="sword-display">낡은 단검</span>
-                </div>
-                <div class="rate-display">
-                    성공률 <span id="success-rate">100</span>%
-                </div>
-                <div class="action-buttons">
-                    <button id="btn-upgrade" onclick="upgradeSword()">⚡ 강화하기</button>
-                    <button id="btn-sell" onclick="sellSword()">💰 검 판매</button>
-                </div>
-            </div>
-
-            <div class="side-panel right-panel">
-                <div class="status-box">
-                    <p>🛡️ 방지권: <span id="shield-count">0</span>개</p>
-                    <p>🪙 내 돈: <span id="money">0</span>원</p>
-                </div>
-                <div class="shop-box">
-                    <p class="shop-title">📦 강화소 상점</p>
-                    <button id="btn-buy-shield" onclick="buyShield()">방지권 구매 (3,000원)</button>
-                </div>
-            </div>
+        <div id="fragment-inventory" style="margin-top: 20px;">
+            <h4>보유한 파편 (💎)</h4>
+            <div id="fragment-list"></div>
         </div>
+
+        <div id="game-log"></div>
+    </div>
+
+    <div id="shop-screen" style="display: none;">
+        <h2>🛒 강화 상점</h2>
+        <p>방지권 개당 5,000원</p>
+        <button onclick="buyShield()">🛡️ 방지권 구매</button>
+        <br><br>
+        <button onclick="goToGame()">🔙 대장간으로 돌아가기</button>
     </div>
 
     <script src="script.js"></script>
