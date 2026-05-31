@@ -2,45 +2,45 @@
 <html lang="ko">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
-    <title>교수님 학점 강화 게임</title>
-    <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f4f4; padding: 20px; }
-        .screen { background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        #fragment-list { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; min-height: 30px; border: 1px solid #ddd; padding: 10px; background: #fafafa; }
-        #game-log { height: 100px; overflow-y: scroll; margin-top: 10px; border: 1px solid #ccc; font-size: 0.8rem; text-align: left; padding: 5px; }
-    </style>
+    <meta charset="UTF-8">
+    <title>교수님 학점 강화 게임</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f4f4f4; padding: 20px; }
+        .screen { background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        #fragment-list { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; min-height: 30px; border: 1px solid #ddd; padding: 10px; background: #fafafa; }
+        #game-log { height: 100px; overflow-y: scroll; margin-top: 10px; border: 1px solid #ccc; font-size: 0.8rem; text-align: left; padding: 5px; }
+    </style>
 </head>
 <body>
 
-    <div id="game-screen" class="screen">
-        <h1>대장간</h1>
-        <p>💰 돈: <span id="money">50,000</span>원 | 🛡️ 방지권: <span id="shield-count">0</span>개</p>
-        <h2>검 레벨: <span id="level-display">+0</span></h2>
-        <p>강화비: <span id="upgrade-cost">500</span>원</p>
-        <p id="shield-req" style="color:red; font-size: 0.9rem;"></p>
-        
-        <button onclick="upgradeSword()">⚡ 강화하기</button>
-        <button onclick="sellSword()">💰 판매하기</button>
-        <br><br>
-        <button onclick="goToShop()">🛒 상점 이동</button>
+    <div id="game-screen" class="screen">
+        <h1>대장간</h1>
+        <p>💰 돈: <span id="money">50,000</span>원 | 🛡️ 방지권: <span id="shield-count">0</span>개</p>
+        <h2>검 레벨: <span id="level-display">+0</span></h2>
+        <p>강화비: <span id="upgrade-cost">500</span>원</p>
+        <p id="shield-req" style="color:red; font-size: 0.9rem;"></p>
+        
+        <button onclick="upgradeSword()">⚡ 강화하기</button>
+        <button onclick="sellSword()">💰 판매하기</button>
+        <br><br>
+        <button onclick="goToShop()">🛒 상점 이동</button>
 
-        <div id="item-inventory" style="margin-top: 20px;">
-            <h3>💎 파편 아이템창 (10개 모으면 복구)</h3>
-            <div id="fragment-list"></div>
-            <button onclick="combineFragments()">🛠️ 파편 10개 결합</button>
-        </div>
-        <div id="game-log"></div>
-    </div>
+        <div id="item-inventory" style="margin-top: 20px;">
+            <h3>💎 파편 아이템창 (10개 모으면 복구)</h3>
+            <div id="fragment-list"></div>
+            <button onclick="combineFragments()">🛠️ 파편 10개 결합</button>
+        </div>
+        <div id="game-log"></div>
+    </div>
 
-    <div id="shop-screen" class="screen" style="display: none;">
-        <h2>🛒 상점</h2>
-        <p>방지권 1개당 5,000원</p>
-        <button onclick="buyShield()">🛡️ 방지권 구매</button>
-        <br><br>
-        <button onclick="goToGame()">🔙 대장간으로 돌아가기</button>
-    </div>
+    <div id="shop-screen" class="screen" style="display: none;">
+        <h2>🛒 상점</h2>
+        <p>방지권 1개당 5,000원</p>
+        <button onclick="buyShield()">🛡️ 방지권 구매</button>
+        <br><br>
+        <button onclick="goToGame()">🔙 대장간으로 돌아가기</button>
+    </div>
 
-    <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
