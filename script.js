@@ -77,18 +77,20 @@ function gameClear() {
     document.getElementById('btn-upgrade').disabled = true;
 }
 
+// ✅ 강화 로직 (최종 버전)
 function upgradeSword() {
     let cost = 500 + (swordLevel * 300);
     
-    // 1. [1강(0->1) 도전 시] 돈이 없으면 즉시 파산
+    // 1. [1강(0->1) 도전 시] 이때는 돈이 없으면 가차 없이 파산!
     if (swordLevel === 0 && money < cost) {
         logMessage("❌ 자금 부족으로 1강 도전 불가 - 탈락!");
         gameOver();
         return;
     }
     
-    // 2. [그 외 레벨] 돈이 없으면 강화 불가 (파산 안 시킴, 판매 후 다시 도전 가능)
+    // 2. [1강 이후] 돈이 부족하면 강화만 안 되고, 판매 후 재도전 가능
     if (money < cost) {
+        alert("⚠️ 돈이 부족합니다! [검 판매]를 눌러 돈을 확보하세요.");
         logMessage("❌ 돈이 부족합니다! 판매 후 다시 시도하세요.");
         return;
     }
@@ -99,10 +101,7 @@ function upgradeSword() {
     if (Math.random() * 100 <= rate) {
         swordLevel++;
         logMessage(`✨ 성공: +${swordLevel} (확률: ${rate.toFixed(1)}%)`);
-        
-        if (swordLevel >= 30) {
-            gameClear();
-        }
+        if (swordLevel >= 30) gameClear();
     } else {
         if (swordLevel >= 5 && shieldCount > 0) { 
             shieldCount--; 
