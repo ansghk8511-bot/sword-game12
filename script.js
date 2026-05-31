@@ -4,17 +4,9 @@ let swordLevel = 0;
 let fragments = [];
 
 const IMAGES = {
-    0: "bokgeom.png",
-    4: "bat.png",
-    5: "yugi.png",
-    6: "bansageom.png",
-    7: "lose.png",
-    8: "8th.png",
-    9: "smell.png",
-    10: "daguri.png",
-    11: "sams.png",
-    12: "highpass.png",
-    13: "forbidden.png"
+    0: "bokgeom.png", 4: "bat.png", 5: "yugi.png", 6: "bansageom.png", 
+    7: "lose.png", 8: "8th.png", 9: "smell.png", 10: "daguri.png", 
+    11: "sams.png", 12: "highpass.png", 13: "forbidden.png"
 };
 
 function goToShop() {
@@ -35,7 +27,10 @@ function updateUI() {
     document.getElementById('level-display').innerText = "+" + swordLevel;
     document.getElementById('sell-price').innerText = (swordLevel * 1000).toLocaleString();
     
-    // 현재 레벨에 맞는 이미지를 찾고, 없으면 bokgeom.png를 보여줌
+    // 강화 성공 확률 계산 (레벨당 5%씩 감소)
+    let rate = Math.max(100 - (swordLevel * 5), 0.5);
+    document.getElementById('success-rate').innerText = rate.toFixed(1);
+    
     document.getElementById('sword-img').src = IMAGES[swordLevel] || "bokgeom.png";
 
     let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
@@ -59,6 +54,8 @@ function upgradeSword() {
     let cost = 500 + (swordLevel * 500);
     if (money < cost) { alert("돈이 부족합니다!"); return; }
     money -= cost;
+    
+    // 강화 확률 적용
     let rate = Math.max(100 - (swordLevel * 5), 0.5);
     
     if (Math.random() * 100 <= rate) {
