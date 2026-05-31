@@ -7,7 +7,7 @@
         body { font-family: 'Pretendard', sans-serif; background: #1a1a2e; display: flex; justify-content: center; padding-top: 50px; }
         .screen { background: #ffffff; padding: 40px; border-radius: 20px; width: 600px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 3px solid #333; }
         h1 { color: #2c3e50; font-size: 2.5rem; margin-bottom: 20px; }
-        #sword-img { width: 250px; height: 250px; border: 8px solid #34495e; border-radius: 20px; margin: 20px; background: #eee; }
+        #sword-img { width: 250px; height: 250px; border: 8px solid #34495e; border-radius: 20px; margin: 20px; background: #eee; object-fit: contain; }
         button { 
             padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 12px; 
             margin: 8px; color: white; transition: all 0.1s; box-shadow: 0 6px #555; font-weight: bold;
@@ -46,8 +46,11 @@
 
     <div id="shop-screen" class="screen" style="display: none;">
         <h1>🛒 중앙중 상점</h1>
-        <p style="font-size: 1.5rem;">방지권: 5,000원</p>
-        <button class="btn-shop" onclick="buyShield()">🛡️ 방지권 구매</button>
+        <div style="font-size: 1.2rem; margin: 10px; color: #2c3e50;">
+            현재 보유 잔고: <span id="shop-money" style="font-weight:bold; color:#27ae60;">50,000</span>원
+        </div>
+        <p>방지권 1개 구매 시 5,000원 차감</p>
+        <button class="btn-shop" onclick="buyShield()">🛡️ 방지권 구매 (5,000원)</button>
         <br><br>
         <button onclick="goToGame()" style="background:#7f8c8d; box-shadow: 0 6px #555;">🔙 대장간으로 돌아가기</button>
     </div>
