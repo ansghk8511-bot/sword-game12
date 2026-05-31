@@ -4,42 +4,42 @@
     <meta charset="UTF-8">
     <title>중앙중 검 강화게임</title>
     <style>
-        body { font-family: 'Pretendard', sans-serif; background: #2c3e50; display: flex; justify-content: center; padding-top: 50px; }
-        .screen { background: #ecf0f1; padding: 40px; border-radius: 20px; width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; }
-        h1 { color: #34495e; }
-        #sword-img { width: 250px; height: 250px; border: 5px solid #bdc3c7; border-radius: 15px; margin: 20px; background: white; }
+        body { font-family: 'Pretendard', sans-serif; background: #1a1a2e; display: flex; justify-content: center; padding-top: 50px; }
+        .screen { background: #ffffff; padding: 40px; border-radius: 20px; width: 600px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 3px solid #333; }
+        h1 { color: #2c3e50; font-size: 2.5rem; margin-bottom: 20px; }
+        #sword-img { width: 250px; height: 250px; border: 8px solid #34495e; border-radius: 20px; margin: 20px; background: #eee; }
         button { 
-            padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 10px; 
-            margin: 5px; color: white; transition: 0.2s; box-shadow: 0 5px #7f8c8d;
+            padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 12px; 
+            margin: 8px; color: white; transition: all 0.1s; box-shadow: 0 6px #555; font-weight: bold;
         }
         button:active { transform: translateY(4px); box-shadow: none; }
         .btn-upgrade { background-color: #e74c3c; }
         .btn-sell { background-color: #27ae60; }
         .btn-shop { background-color: #2980b9; }
-        #fragment-list { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; min-height: 50px; border: 2px dashed #bdc3c7; padding: 15px; }
-        #game-log { height: 120px; overflow-y: scroll; margin-top: 20px; border: 2px solid #bdc3c7; background: #fff; padding: 10px; text-align: left; }
+        #fragment-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; min-height: 50px; border: 3px dashed #95a5a6; padding: 15px; border-radius: 10px; }
+        #game-log { height: 120px; overflow-y: scroll; margin-top: 20px; border: 3px solid #34495e; background: #ecf0f1; padding: 10px; text-align: left; border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <div id="game-screen" class="screen">
         <h1>🗡️ 중앙중 검 강화게임</h1>
-        <img id="sword-img" src="bokgeom.png" alt="검">
-        <div style="font-size: 1.5rem; font-weight: bold; margin: 10px;">
-            💰 돈: <span id="money">50,000</span>원 | 🛡️ 방지권: <span id="shield-count">0</span>개
+        <img id="sword-img" src="bokgeom.png" alt="강화 검">
+        <div style="font-size: 1.6rem; font-weight: bold; margin: 15px; color: #2c3e50;">
+            💰 잔고: <span id="money">50,000</span>원 | 🛡️ 방지권: <span id="shield-count">0</span>개
         </div>
-        <h2>검 레벨: <span id="level-display">+0</span></h2>
-        <p id="shield-req" style="color:red; font-size: 1.1rem; font-weight: bold;"></p>
+        <h2 style="font-size: 2rem;">검 레벨: <span id="level-display">+0</span></h2>
+        <p id="shield-req" style="color:#c0392b; font-size: 1.2rem; font-weight: bold;"></p>
         
-        <button class="btn-upgrade" onclick="upgradeSword()">⚡ 강화하기</button>
-        <button class="btn-sell" onclick="sellSword()">💰 판매하기</button>
+        <button class="btn-upgrade" onclick="upgradeSword()">⚡ 검 강화하기</button>
+        <button class="btn-sell" onclick="sellSword()">💰 검 판매하기</button>
         <br>
         <button class="btn-shop" onclick="goToShop()">🛒 상점 이동</button>
 
         <div style="margin-top: 30px;">
             <h3>💎 파편 보관함</h3>
             <div id="fragment-list"></div>
-            <button onclick="combineFragments()" style="background:#f39c12;">🛠️ 파편 10개 결합</button>
+            <button onclick="combineFragments()" style="background:#f39c12; box-shadow: 0 6px #b87333;">🛠️ 파편 10개로 복구</button>
         </div>
         <div id="game-log"></div>
     </div>
@@ -49,7 +49,7 @@
         <p style="font-size: 1.5rem;">방지권: 5,000원</p>
         <button class="btn-shop" onclick="buyShield()">🛡️ 방지권 구매</button>
         <br><br>
-        <button onclick="goToGame()" style="background:#7f8c8d;">🔙 돌아가기</button>
+        <button onclick="goToGame()" style="background:#7f8c8d; box-shadow: 0 6px #555;">🔙 대장간으로 돌아가기</button>
     </div>
 
     <script src="script.js"></script>
