@@ -80,16 +80,16 @@ function gameClear() {
 function upgradeSword() {
     let cost = 500 + (swordLevel * 300);
     
-    // [규칙] 1강(0->1) 도전 시 돈이 없으면 즉시 파산
+    // 1. [1강(0->1) 도전 시] 돈이 없으면 즉시 파산
     if (swordLevel === 0 && money < cost) {
         logMessage("❌ 자금 부족으로 1강 도전 불가 - 탈락!");
         gameOver();
         return;
     }
     
-    // [규칙] 나머지 레벨에서 돈 부족 시 강화 불가
+    // 2. [그 외 레벨] 돈이 없으면 강화 불가 (파산 안 시킴, 판매 후 다시 도전 가능)
     if (money < cost) {
-        logMessage("❌ 돈이 부족합니다!");
+        logMessage("❌ 돈이 부족합니다! 판매 후 다시 시도하세요.");
         return;
     }
     
@@ -100,4 +100,32 @@ function upgradeSword() {
         swordLevel++;
         logMessage(`✨ 성공: +${swordLevel} (확률: ${rate.toFixed(1)}%)`);
         
-        if (swordLevel >= 30)
+        if (swordLevel >= 30) {
+            gameClear();
+        }
+    } else {
+        if (swordLevel >= 5 && shieldCount > 0) { 
+            shieldCount--; 
+            logMessage("🛡️ 방지권 사용"); 
+        } else { 
+            swordLevel = 0; 
+            logMessage("💥 파괴!"); 
+        }
+    }
+    updateUI();
+}
+
+function sellSword() {
+    if (swordLevel === 0) { logMessage("⚠️ 0강은 판매 불가!"); return; }
+    money += calculateSellPrice(swordLevel);
+    logMessage(`💰 판매: ${calculateSellPrice(swordLevel).toLocaleString()}원 획득`);
+    swordLevel = 0;
+    updateUI();
+}
+
+function buyShield() {
+    if (money >= SHIELD_PRICE) { money -= SHIELD_PRICE; shieldCount++; updateUI(); }
+    else { logMessage("❌ 돈 부족!"); }
+}
+
+updateUI();
