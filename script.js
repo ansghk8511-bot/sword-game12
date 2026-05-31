@@ -25,9 +25,7 @@ function updateUI() {
     document.getElementById('money').innerText = money.toLocaleString();
     document.getElementById('shield-count').innerText = shieldCount;
     document.getElementById('level-display').innerText = "+" + swordLevel;
-    document.getElementById('upgrade-cost').innerText = (500 + (swordLevel * 500)).toLocaleString();
     
-    // 이미지 처리
     let imgDisplay = document.getElementById('sword-img');
     let img = "bokgeom.png";
     for (let i = swordLevel; i >= 0; i--) {
@@ -54,9 +52,7 @@ function logMessage(msg) {
 
 function upgradeSword() {
     let cost = 500 + (swordLevel * 500);
-    if (swordLevel === 0 && money < cost) { alert("💀 파산! 게임을 다시 시작합니다."); location.reload(); return; }
-    if (money < cost) { alert("⚠️ 돈이 부족합니다!"); return; }
-    
+    if (money < cost) { alert("돈이 부족합니다!"); return; }
     money -= cost;
     let rate = Math.max(100 - (swordLevel * 5), 0.5);
     
@@ -67,7 +63,7 @@ function upgradeSword() {
         let req = (swordLevel < 5) ? 0 : Math.floor((swordLevel - 5) / 1) + 2;
         if (req > 0 && shieldCount >= req) {
             shieldCount -= req;
-            logMessage(`🛡️ 방지권 ${req}개 소모하여 방어!`);
+            logMessage(`🛡️ 방지권 ${req}개 소모!`);
         } else {
             let earned = Math.floor(swordLevel / 2) + 1;
             for(let i = 0; i < earned; i++) fragments.push({});
@@ -80,21 +76,19 @@ function upgradeSword() {
 
 function buyShield() {
     if (money >= 5000) { money -= 5000; shieldCount++; logMessage("🛡️ 방지권 구매"); updateUI(); }
-    else { alert("❌ 돈 부족!"); }
+    else { alert("돈 부족!"); }
 }
 
 function sellSword() {
     if (swordLevel === 0) return;
-    let price = swordLevel * 1000;
-    money += price;
-    logMessage(`💰 판매: ${price.toLocaleString()}원`);
+    money += (swordLevel * 1000);
     swordLevel = 0;
     updateUI();
 }
 
 function combineFragments() {
     if (fragments.length >= 10) { fragments.splice(0, 10); swordLevel++; updateUI(); }
-    else { alert("❌ 파편 부족!"); }
+    else { alert("파편 부족!"); }
 }
 
 updateUI();
